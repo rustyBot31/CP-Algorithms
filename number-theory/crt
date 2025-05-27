@@ -1,0 +1,21 @@
+pll merge(ll r1, ll m1, ll r2, ll m2) {
+    ll x, y;
+    ll g = extendedGCD(m1, m2, x, y);
+    if ((r2 - r1) % g != 0) return {-1, -1};
+    ll lcm = m1 / g * m2;
+    ll diff = r2 - r1;
+    x = (x * (diff / g)) % (m2 / g);
+    ll res = (r1 + m1 * x) % lcm;
+    if (res < 0) res += lcm;
+    return {res, lcm};
+}
+
+pll crt(const vector<ll> &r, const vector<ll> &m) {
+    assert(r.size() == m.size());
+    ll res = r[0], mod = m[0];
+    for (int i = 1; i < (int)r.size(); i++) {
+        tie(res, mod) = merge(res, mod, r[i], m[i]);
+        if (res == -1) return {-1, -1};
+    }
+    return {res, mod};
+}
