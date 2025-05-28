@@ -1,0 +1,117 @@
+//Radhe Radhe
+//Hare Krishna
+//Author - Swastik Bose
+
+#include <bits/stdc++.h>
+using namespace std;
+
+typedef long long ll;
+typedef long double ld;
+typedef pair<int,int> pii;
+typedef pair<ll,ll> pll;
+typedef pair<int,ll> pil;
+
+//Constants
+const int mod1=(int)(1e9)+7;
+const int mod2=998244353;
+const ll MAXVAL=(ll)1e18+1;
+const ll MINVAL=(ll)-1e18+1;
+
+//Binary Exponentiation
+ll binaryExpo(ll a, ll b, int m)
+{
+    ll result = 1;
+    while (b) {
+        if (b & 1)
+            result = (result * a) % m;
+        a = (a * a) % m;
+        b >>= 1;
+    }
+    return result;
+}
+
+//Smallest Prime Factor
+vector<int> smallestPrimeFactor(int max) {
+    vector<int> sieve(max+1);
+    iota(sieve.begin(),sieve.end(),0);
+    for(int p=2;p<=max;p++) {
+        if(sieve[p]!=p) {
+            continue;
+        }
+        for(int j=2*p;j<=max;j+=p) {
+            if(sieve[j]==j) {
+                sieve[j]=p;
+            } 
+        }
+    }
+    return sieve;
+}
+
+// Krishna: Matrix multiplication (modular)
+vector<vector<ll>> multiply(const vector<vector<ll>> &A, const vector<vector<ll>> &B, int mod) {
+    int n = A.size(), m = B[0].size(), p = B.size();
+    vector<vector<ll>> C(n, vector<ll>(m, 0));
+    for (int i = 0; i < n; ++i)
+        for (int j = 0; j < m; ++j)
+            for (int k = 0; k < p; ++k)
+                C[i][j] = (C[i][j] + A[i][k] * B[k][j] % mod) % mod;
+    return C;
+}
+
+// Krishna: Exponentiate matrix A to power n (modular)
+vector<vector<ll>> matrixExpo(vector<vector<ll>> A, ll n, int mod) {
+    int k = A.size();
+    vector<vector<ll>> res(k, vector<ll>(k, 0));
+    for (int i = 0; i < k; ++i) res[i][i] = 1; // Identity
+    while (n) {
+        if (n & 1) res = multiply(res, A, mod);
+        A = multiply(A, A, mod);
+        n >>= 1;
+    }
+    return res;
+}
+
+// Krishna: Solve the n-th term of k-order linear recurrence
+ll solveRecurrence(int k, ll n, const vector<ll> &initial, const vector<ll> &coeff, int mod) {
+    if (n < k) return initial[n] % mod;
+
+    vector<vector<ll>> T(k, vector<ll>(k, 0));
+    for (int i = 0; i < k; ++i) T[0][i] = coeff[i] % mod;
+    for (int i = 1; i < k; ++i) T[i][i - 1] = 1;
+
+    T = matrixExpo(T, n - k + 1, mod);
+
+    vector<vector<ll>> F(k, vector<ll>(1));
+    for (int i = 0; i < k; ++i) F[i][0] = initial[k - i - 1] % mod;
+
+    vector<vector<ll>> result = multiply(T, F, mod);
+    return result[0][0];
+}
+
+//Code chala do, Kanha!
+void solve() {
+    int k;
+    ll n;
+    cin >> k;
+
+    vector<ll> initial(k), coeff(k);
+    for (int i = 0; i < k; ++i) cin >> initial[i];
+    for (int i = 0; i < k; ++i) cin >> coeff[i];
+
+    cin >> n;
+
+    cout << solveRecurrence(k, n, initial, coeff, mod1) << '\n';
+}
+
+//Krishna is the doer, I am just a medium!
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
+    cout.tie(0);
+	int t = 1;
+	//cin >> t;
+	while(t--) {
+	    solve();
+	}
+	return 0;
+}
