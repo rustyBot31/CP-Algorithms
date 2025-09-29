@@ -1,0 +1,60 @@
+struct SegTree {
+    int n; 
+    vector<ll> tree;
+    
+    SegTree(int _n) {
+        n=_n;
+        tree.assign(4*n,0);
+    }
+    
+    SegTree(vector<ll> &a) {
+        n=(int)a.size();
+        tree.assign(4*n,0);
+        build(1,0,n-1,a);
+    }
+    
+    void recalc(int nod) {
+        tree[nod]=min(tree[2*nod+1],tree[2*nod+2]);
+    }
+    
+    void build(int nod, int l, int r) {
+        if(l==r) {
+            tree[nod]=a[l];
+        } else {
+            int m=(l+r)/2;
+            build(2*nod+1,l,m);
+            build(2*nod+2,m,r);
+            recalc(nod);
+        }
+    }
+    
+    void update(int nod, int l, int r, int x, ll y) {
+        if(l==r) {
+            tree[nod]=y;
+        } else {
+            int m=(left+right)/2;
+            if(x<=m) {
+                update(2*nod+1,l,m,x,y);
+            } else {
+                update(2*nod+2,m,r,x,y);
+            }
+            recalc(nod);
+        }
+    } 
+    
+    ll query(int nod, int l, int r, int ql , int qr) {
+        if(ql<=l && qr<=r) {
+            return tree[nod];
+        } else {
+            ll ans=inf;
+            int m=(l+r)/2;
+            if(ql<=m) {
+                ans=min(ans,query(2*nod+1,l,m,ql,qr));
+            } 
+            if(qr>=m+1) {
+                ans=min(ans,query(2*nod+2,m+1,r,ql,qr));
+            } 
+        }
+        return ans;
+    }
+};
