@@ -6,13 +6,13 @@ struct SegTree {
 
     SegTree(int _n) {
         n = _n;
-        tree.assign(4*n, INF);
+        tree.assign(4*n, inf);
         lazy.assign(4*n, 0);
     }
 
     SegTree(const vector<ll> &a) {
         n = (int)a.size();
-        tree.assign(4*n, INF);
+        tree.assign(4*n, inf);
         lazy.assign(4*n, 0);
         build(1,0,n-1,a);
     }
@@ -64,7 +64,7 @@ struct SegTree {
     // range min query
     ll query(int nod, int l, int r, int ql, int qr) {
         push(nod, l, r);
-        if(qr < l || r < ql) return INF;
+        if(qr < l || r < ql) return inf;
 
         if(ql <= l && r <= qr) return tree[nod];
 
