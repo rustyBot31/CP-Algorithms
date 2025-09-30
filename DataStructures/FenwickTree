@@ -1,0 +1,51 @@
+//Fenwick Tree
+struct FenwickTree {
+    int n;
+    vector<ll> bit;
+
+    // Initialize with size n
+    FenwickTree(int _n) {
+        n = _n;
+        bit.assign(n+1, 0); // 1-based indexing
+    }
+
+    // Initialize with array
+    FenwickTree(const vector<ll> &a) {
+        n = (int)a.size();
+        bit.assign(n+1, 0);
+        for(int i = 0; i < n; i++) {
+            add(i, a[i]);
+        }
+    }
+
+    // Add 'val' to index idx (0-based)
+    void add(int idx, ll val) {
+        idx++; // 1-based BIT
+        while(idx <= n) {
+            bit[idx] += val;
+            idx += idx & -idx;
+        }
+    }
+
+    // Get prefix sum [0, idx] (0-based)
+    ll sum(int idx) {
+        idx++; // 1-based BIT
+        ll res = 0;
+        while(idx > 0) {
+            res += bit[idx];
+            idx -= idx & -idx;
+        }
+        return res;
+    }
+
+    // Get sum of range [l, r] (0-based)
+    ll rangeSum(int l, int r) {
+        return sum(r) - sum(l-1);
+    }
+
+    // Optional: set index to a new value (overwrite)
+    void set(int idx, ll val) {
+        ll cur = rangeSum(idx, idx);
+        add(idx, val - cur);
+    }
+};
