@@ -1,4 +1,5 @@
 //Fenwick Tree
+//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/DataStructures/FenwickTree
 struct FenwickTree {
     int n;
     vector<ll> bit;
