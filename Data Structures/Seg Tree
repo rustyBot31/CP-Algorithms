@@ -1,15 +1,20 @@
+//Segment Tree
+//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/Data%20Structures/Seg%20Tree
 struct SegTree {
     int n; 
-    vector<ll> tree;
+    vector<ll> tree, lazy; 
+    const ll INF = (1LL<<60);
 
     SegTree(int _n) {
-        n=_n;
-        tree.assign(4*n,inf);
+        n = _n;
+        tree.assign(4*n, INF);
+        lazy.assign(4*n, 0);
     }
 
     SegTree(const vector<ll> &a) {
-        n=(int)a.size();
-        tree.assign(4*n,inf);
+        n = (int)a.size();
+        tree.assign(4*n, INF);
+        lazy.assign(4*n, 0);
         build(1,0,n-1,a);
     }
 
@@ -19,30 +24,53 @@ struct SegTree {
 
     void build(int nod, int l, int r, const vector<ll> &a) {
         if(l==r) {
-            tree[nod]=a[l];
+            tree[nod] = a[l];
         } else {
-            int m=(l+r)/2;
+            int m = (l+r)/2;
             build(2*nod,l,m,a);
             build(2*nod+1,m+1,r,a);
             recalc(nod);
         }
     }
 
-    void update(int nod, int l, int r, int idx, ll val) {
-        if(l==r) {
-            tree[nod]=val;
-        } else {
-            int m=(l+r)/2;
-            if(idx<=m) update(2*nod,l,m,idx,val);
-            else update(2*nod+1,m+1,r,idx,val);
-            recalc(nod);
+    // push down pending updates
+    void push(int nod, int l, int r) {
+        if(lazy[nod] != 0) {
+            tree[nod] += lazy[nod];
+            if(l != r) { // not a leaf
+                lazy[2*nod]     += lazy[nod];
+                lazy[2*nod + 1] += lazy[nod];
+            }
+            lazy[nod] = 0;
         }
     }
 
+    // range add update
+    void update(int nod, int l, int r, int ql, int qr, ll val) {
+        push(nod, l, r);
+        if(qr < l || r < ql) return; // no overlap
+
+        if(ql <= l && r <= qr) { // full cover
+            lazy[nod] += val;
+            push(nod, l, r);
+            return;
+        }
+
+        int m = (l+r)/2;
+        update(2*nod, l, m, ql, qr, val);
+        update(2*nod+1, m+1, r, ql, qr, val);
+        recalc(nod);
+    }
+
+    // range min query
     ll query(int nod, int l, int r, int ql, int qr) {
-        if(qr<l || r<ql) return inf;
-        if(ql<=l && r<=qr) return tree[nod];
-        int m=(l+r)/2;
-        return min(query(2*nod,l,m,ql,qr),query(2*nod+1,m+1,r,ql,qr));
+        push(nod, l, r);
+        if(qr < l || r < ql) return INF;
+
+        if(ql <= l && r <= qr) return tree[nod];
+
+        int m = (l+r)/2;
+        return min(query(2*nod, l, m, ql, qr),
+                   query(2*nod+1, m+1, r, ql, qr));
     }
 };
