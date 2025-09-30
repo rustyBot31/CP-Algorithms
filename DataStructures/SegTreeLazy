@@ -1,5 +1,5 @@
 //Segment Tree
-//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/Data%20Structures/Seg%20Tree
+//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/DataStructures/SegTreeLazy
 struct SegTree {
     int n; 
     vector<ll> tree, lazy; 
