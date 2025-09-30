@@ -3,7 +3,6 @@
 struct SegTree {
     int n; 
     vector<ll> tree, lazy; 
-    const ll INF = (1LL<<60);
 
     SegTree(int _n) {
         n = _n;
@@ -70,7 +69,6 @@ struct SegTree {
         if(ql <= l && r <= qr) return tree[nod];
 
         int m = (l+r)/2;
-        return min(query(2*nod, l, m, ql, qr),
-                   query(2*nod+1, m+1, r, ql, qr));
+        return min(query(2*nod, l, m, ql, qr),query(2*nod+1, m+1, r, ql, qr));
     }
 };
