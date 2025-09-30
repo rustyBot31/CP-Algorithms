@@ -1,4 +1,5 @@
 //Seg Tree for point update
+//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/DataStructures/SegTree
 struct SegTree {
     int n; 
     vector<ll> tree;
