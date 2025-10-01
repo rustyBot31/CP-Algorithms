@@ -1,0 +1,34 @@
+//Fenwick tree for just point updates
+//
+struct Fenwick {
+    int n;
+    vector<ll> bit;
+
+    Fenwick(int size) {
+        n = size;
+        bit.assign(n + 1, 0); // 1-based indexing
+    }
+
+    // Add val to index idx (1-based)
+    void update(int idx, ll val) {
+        while (idx <= n) {
+            bit[idx] += val;
+            idx += idx & -idx;
+        }
+    }
+
+    // Prefix sum [1..idx]
+    ll query(int idx) {
+        ll res = 0;
+        while (idx > 0) {
+            res += bit[idx];
+            idx -= idx & -idx;
+        }
+        return res;
+    }
+
+    // Range sum [l..r]
+    ll query(int l, int r) {
+        return query(r) - query(l - 1);
+    }
+};
