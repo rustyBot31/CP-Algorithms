@@ -1,5 +1,5 @@
 //Fenwick tree for just point updates
-//
+//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/DataStructures/FenwickTreeOneBIT
 struct Fenwick {
     int n;
     vector<ll> bit;
