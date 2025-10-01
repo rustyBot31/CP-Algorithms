@@ -1,52 +1,56 @@
 //Fenwick Tree
-//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/DataStructures/FenwickTree
-struct FenwickTree {
+//Source : 
+struct Fenwick {
     int n;
-    vector<ll> bit;
+    vector<ll> B1, B2;
 
-    // Initialize with size n
-    FenwickTree(int _n) {
-        n = _n;
-        bit.assign(n+1, 0); // 1-based indexing
+    Fenwick(int n) {
+        this->n = n;
+        B1.assign(n + 1, 0);
+        B2.assign(n + 1, 0);
     }
 
-    // Initialize with array
-    FenwickTree(const vector<ll> &a) {
-        n = (int)a.size();
-        bit.assign(n+1, 0);
-        for(int i = 0; i < n; i++) {
-            add(i, a[i]);
-        }
-    }
-
-    // Add 'val' to index idx (0-based)
-    void add(int idx, ll val) {
-        idx++; // 1-based BIT
-        while(idx <= n) {
+    // internal add to BIT
+    void add(vector<ll>& bit, int idx, ll val) {
+        for (; idx <= n; idx += idx & -idx) {
             bit[idx] += val;
-            idx += idx & -idx;
         }
     }
 
-    // Get prefix sum [0, idx] (0-based)
-    ll sum(int idx) {
-        idx++; // 1-based BIT
+    // internal sum from BIT
+    ll sum(const vector<ll>& bit, int idx) {
         ll res = 0;
-        while(idx > 0) {
+        for (; idx > 0; idx -= idx & -idx) {
             res += bit[idx];
-            idx -= idx & -idx;
         }
         return res;
     }
 
-    // Get sum of range [l, r] (0-based)
-    ll rangeSum(int l, int r) {
-        return sum(r) - sum(l-1);
+    // add val to range [l..r]
+    void range_update(int l, int r, ll val) {
+        add(B1, l, val);
+        add(B1, r + 1, -val);
+        add(B2, l, val * (l - 1));
+        add(B2, r + 1, -val * r);
     }
 
-    // Optional: set index to a new value (overwrite)
-    void set(int idx, ll val) {
-        ll cur = rangeSum(idx, idx);
-        add(idx, val - cur);
+    // add val to a single point idx
+    void point_update(int idx, ll val) {
+        range_update(idx, idx, val);
+    }
+
+    // prefix sum [1..idx]
+    ll prefix_sum(int idx) {
+        return sum(B1, idx) * idx - sum(B2, idx);
+    }
+
+    // range sum [l..r]
+    ll range_query(int l, int r) {
+        return prefix_sum(r) - prefix_sum(l - 1);
+    }
+
+    // get value at a single index
+    ll point_query(int idx) {
+        return range_query(idx, idx);
     }
 };
