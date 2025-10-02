@@ -1,5 +1,5 @@
 //Sparse Table
-//
+//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/DataStructures/SparseTable
 struct SparseTable {
     int n, LOG;
     vector<vector<int>> st;
