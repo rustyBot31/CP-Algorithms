@@ -1,3 +1,6 @@
+//Binary Lifting
+//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/Tree/BinaryLifting
+
 int timer;
 vector<int> tin, tout;
 vector<vector<int>> up;
