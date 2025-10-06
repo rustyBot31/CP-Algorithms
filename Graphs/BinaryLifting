@@ -1,14 +1,8 @@
 // Binary Lifting Template
 // Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/Graphs/BinaryLifting
 
-#include <bits/stdc++.h>
-using namespace std;
-
-int n, l; // n = number of nodes, l = ceil(log2(n))
-vector<vector<int>> adj;
-
 // Binary Lifting
-int timer;
+int timer,l;
 vector<int> tin, tout;
 vector<vector<int>> up;
 
