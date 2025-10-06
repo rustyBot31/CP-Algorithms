@@ -1,7 +1,6 @@
 // Binary Lifting Template
 // Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/Graphs/BinaryLifting
 
-// Binary Lifting
 int timer,l;
 vector<int> tin, tout;
 vector<vector<int>> up;
