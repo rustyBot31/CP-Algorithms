@@ -1,5 +1,5 @@
 // Binary Lifting Template
-// Source : 
+// Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/Graphs/BinaryLifting
 
 #include <bits/stdc++.h>
 using namespace std;
