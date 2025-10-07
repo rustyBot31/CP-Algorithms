@@ -31,11 +31,12 @@ void dfs(int v, const vector<vector<int>>& adj, vector<bool>& visited, vector<in
     order.push_back(v);
 }
 
-void SCC(const vector<vector<int>>& adj, vector<vector<int>>& components, vector<vector<int>>& adj_cond) {
+tuple<vector<vector<int>>,vector<vector<int>>> SCC(const vector<vector<int>>& adj) {
     int n = adj.size();
     vector<bool> visited(n, false);
     vector<int> order;
-
+    vector<vector<int>> components;
+    vector<vector<int>> adj_cond(n);
     // First DFS pass on original graph
     for (int i = 0; i < n; ++i) {
         if (!visited[i]) dfs(i, adj, visited, order);
@@ -78,4 +79,5 @@ void SCC(const vector<vector<int>>& adj, vector<vector<int>>& components, vector
         sort(edges.begin(), edges.end());
         edges.erase(unique(edges.begin(), edges.end()), edges.end());
     }
+    return {components, adj_cond};
 }
