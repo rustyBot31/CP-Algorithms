@@ -1,1 +1,61 @@
+//Kosaraju for SCC
+//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/Graphs/Kosaraju
+
+void dfs(int v, const vector<vector<int>>& adj, vector<bool>& visited, vector<int>& order) {
+    visited[v] = true;
+    for (int u : adj[v]) {
+        if (!visited[u]) dfs(u, adj, visited, order);\
+    }
+    order.push_back(v);
+}
+
+void SCC(const vector<vector<int>>& adj, vector<vector<int>>& components, vector<vector<int>>& adj_cond) {
+    int n = adj.size();
+    vector<bool> visited(n, false);
+    vector<int> order;
+
+    // First DFS pass on original graph
+    for (int i = 0; i < n; ++i) {
+        if (!visited[i]) dfs(i, adj, visited, order);
+    }
+
+    // Build reversed graph
+    vector<vector<int>> rev(n);
+    for (int v = 0; v < n; ++v) {
+        for (int u : adj[v]) rev[u].push_back(v);
+    }
+
+    // Second DFS pass on reversed graph (in reverse finish order)
+    fill(visited.begin(), visited.end(), false);
+    reverse(order.begin(), order.end());
+    vector<int> root(n);
+    components.clear();
+
+    for (int v : order) {
+        if (!visited[v]) {
+            vector<int> comp;
+            dfs(v, rev, visited, comp);
+            components.push_back(comp);
+            int r = *min_element(comp.begin(), comp.end());
+            for (int u : comp) root[u] = r;
+        }
+    }
+
+    // Build condensation graph (DAG of SCCs)
+    adj_cond.assign(n, {});
+    for (int v = 0; v < n; ++v) {
+        for (int u : adj[v]) {
+            if (root[v] != root[u]) {
+                adj_cond[root[v]].push_back(root[u]);
+            }
+        }
+    }
+
+    // Remove duplicate edges in adj_cond
+    //Might be O(E log V) in worst case
+    for (auto& edges : adj_cond) {
+        sort(edges.begin(), edges.end());
+        edges.erase(unique(edges.begin(), edges.end()), edges.end());
+    }
+}
 
