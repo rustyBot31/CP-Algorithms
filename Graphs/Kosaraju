@@ -13,7 +13,6 @@ pii is_connected(int n, vector<vector<int>> &adj) {
             if(vis[e]) continue;
             vis[e]=true;
             qu.push(e);
-            cnt++;
         }
     }
     for(int i=1;i<n;i++) {
@@ -27,7 +26,7 @@ pii is_connected(int n, vector<vector<int>> &adj) {
 void dfs(int v, const vector<vector<int>>& adj, vector<bool>& visited, vector<int>& order) {
     visited[v] = true;
     for (int u : adj[v]) {
-        if (!visited[u]) dfs(u, adj, visited, order);\
+        if (!visited[u]) dfs(u, adj, visited, order);
     }
     order.push_back(v);
 }
@@ -65,7 +64,6 @@ void SCC(const vector<vector<int>>& adj, vector<vector<int>>& components, vector
     }
 
     // Build condensation graph (DAG of SCCs)
-    adj_cond.assign(n, {});
     for (int v = 0; v < n; ++v) {
         for (int u : adj[v]) {
             if (root[v] != root[u]) {
@@ -76,9 +74,8 @@ void SCC(const vector<vector<int>>& adj, vector<vector<int>>& components, vector
 
     // Remove duplicate edges in adj_cond
     //Might be O(E log V) in worst case
-    for (auto& edges : adj_cond) {
+    for (auto &edges : adj_cond) {
         sort(edges.begin(), edges.end());
         edges.erase(unique(edges.begin(), edges.end()), edges.end());
     }
 }
-
