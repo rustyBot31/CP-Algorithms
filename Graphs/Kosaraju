@@ -1,6 +1,25 @@
 //Kosaraju for SCC
 //Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/Graphs/Kosaraju
 
+bool is_connected(int n, vector<vector<int>> &adj) {
+    vector<bool> vis(n,false);
+    queue<int> qu;
+    qu.push(0);
+    vis[0]=true;
+    int cnt=1;
+    while(!qu.empty()) {
+        int tmp=qu.front();
+        qu.pop();
+        for(int e : adj[tmp]) {
+            is(vis[e]) continue;
+            vis[e]=true;
+            qu.push(e);
+            cnt++;
+        }
+    }
+    return cnt==n;
+}
+
 void dfs(int v, const vector<vector<int>>& adj, vector<bool>& visited, vector<int>& order) {
     visited[v] = true;
     for (int u : adj[v]) {
