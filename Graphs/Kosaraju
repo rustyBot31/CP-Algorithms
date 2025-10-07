@@ -11,7 +11,7 @@ bool is_connected(int n, vector<vector<int>> &adj) {
         int tmp=qu.front();
         qu.pop();
         for(int e : adj[tmp]) {
-            is(vis[e]) continue;
+            if(vis[e]) continue;
             vis[e]=true;
             qu.push(e);
             cnt++;
