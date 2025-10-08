@@ -1,1 +1,36 @@
+//DSU by Rank
+//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/DataStructures/DSUByRank
+
+struct DSU {
+    vector<pii> parent; // {parent, distance_to_parent}
+    vector<int> rank;
+
+    DSU(int n) {
+        parent.resize(n + 1);
+        rank.resize(n + 1, 0);
+        for (int i = 1; i <= n; i++)
+            parent[i] = {i, 0}; // each node is its own parent
+    }
+
+    pii find_set(int v) {
+        if (v != parent[v].first) {
+            pii p = find_set(parent[v].first);
+            parent[v].first = p.first;
+            parent[v].second += p.second; // accumulate distance to root
+        }
+        return parent[v];
+    }
+
+    void union_sets(int a, int b) {
+        a = find_set(a).first;
+        b = find_set(b).first;
+        if (a != b) {
+            if (rank[a] < rank[b])
+                swap(a, b);
+            parent[b] = {a, 1}; // edge weight (distance to parent)
+            if (rank[a] == rank[b])
+                rank[a]++;
+        }
+    }
+};
 
