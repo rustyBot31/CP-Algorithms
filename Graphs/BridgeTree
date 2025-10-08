@@ -9,7 +9,6 @@ vector<bool> vis;
 vector<int> comp;
 vector<vector<int>> tree;
 int timer = 0;
-int fn=0, mx=0;
 
 void dfs(int u, int p = -1){
     vis[u] = true;
