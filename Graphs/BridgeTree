@@ -1,1 +1,48 @@
+//Bridge Tree template
+//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/Graphs/BridgeTree
+
+int n;
+vector<vector<int>> adj;
+vector<int> disc, low;
+vector<pair<int,int>> bridges;
+vector<bool> vis;
+int timer = 0;
+vector<int> comp;
+vector<vector<int>> tree;
+
+void dfs(int u, int p = -1){
+    vis[u] = true;
+    disc[u] = low[u] = timer++;
+    for(int v : adj[u]){
+        if(v == p) continue;
+        if(vis[v]){
+            low[u] = min(low[u], disc[v]);
+        } else {
+            dfs(v,u);
+            low[u] = min(low[u], low[v]);
+            if(low[v] > disc[u]) bridges.push_back({u,v});
+        }
+    }
+}
+
+void assign_component(int u, int cid){
+    comp[u] = cid;
+    for(int v : adj[u]){
+        if(comp[v] != -1) continue;
+        if((low[v] > disc[u]) || (low[u] > disc[v])) continue; // bridge
+        assign_component(v, cid);
+    }
+}
+
+void build_bridge_tree(){
+    int cid = 0;
+    comp.assign(n,-1);
+    for(int i=0; i<n; i++) if(comp[i]==-1) assign_component(i,cid++);
+    tree.assign(cid,{});
+    for(auto &[u,v] : bridges){
+        int cu = comp[u], cv = comp[v];
+        tree[cu].push_back(cv);
+        tree[cv].push_back(cu);
+    }
+}
 
