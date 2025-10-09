@@ -1,5 +1,5 @@
 //Kruskal Algorithm for MST
-
+//Source : https://github.com/rustyBot31/CP-Algorithms/blob/main/Graphs/KruskalDSU
 struct KruskalMST {
     struct Edge {
         int u, v, weight;
