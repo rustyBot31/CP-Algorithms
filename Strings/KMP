@@ -1,1 +1,41 @@
-
+/*--------------------KMP Algorithm--------------------*/
+//Find occurrences of "pat" in "txt"
+vector<ll> KMP(string& txt, string& pat) {
+    ll n=txt.size(),m=pat.size();
+    vector<ll> found;
+    // LPS Array
+    vector<ll> lps(m,0);
+    ll pre=0,suf=1;
+    while(suf<m)
+    {
+        if(pat[pre]==pat[suf])
+        {
+            lps[suf]=pre+1;
+            pre++,suf++;
+        }
+        else
+        {
+            if(pre==0) suf++;
+            else pre=lps[pre-1];
+        }
+    }
+    ll f=0,s=0;
+    while(f<n)
+    {
+        if(txt[f]==pat[s])
+        {
+            f++,s++;
+            if(s==m)
+            {
+                found.push_back(f-s);
+                s=lps[s-1];
+            }
+        }
+        else
+        {
+            if(s==0) f++;
+            else s=lps[s-1];
+        }
+    }
+    return found;
+}
