@@ -1,0 +1,27 @@
+/*--------------------Z Algorithm--------------------*/
+//Find occurrences of "pat" in "txt"
+vector<ll> ZAlgo(string& txt, string& pat) {
+    // Concatenate the strings by adding a special character between them
+    string res=pat+"#"+txt;
+    ll n=res.size(),m=pat.size();
+    // Z Function
+    vector<ll> z(n);
+    ll l=0,r=0;
+    for(ll i=1;i<n;i++) 
+    {
+        if(i<r) z[i]=min(r-i,z[i-l]);
+        while(i+z[i]<n && res[z[i]]==res[i+z[i]]) z[i]++;
+        if(i+z[i]>r)
+        {
+            l=i;
+            r=i+z[i];
+        }
+    }
+    vector<ll> pos;
+    for(ll i=m;i<n;i++)
+    {
+        if(z[i]==m)
+        pos.push_back(i-m-1);
+    }
+    return pos;
+}
